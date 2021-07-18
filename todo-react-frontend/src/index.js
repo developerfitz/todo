@@ -3,4 +3,4 @@ import ReactDOM from "react-dom";
 import App from "./App";
 
 var mountNode = document.getElementById("app");
-ReactDOM.render(<App title="Todos Frontend - Todo" />, mountNode);
+ReactDOM.render(<App title="Todos Frontend - TMF"/>, mountNode);

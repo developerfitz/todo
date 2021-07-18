@@ -62,3 +62,21 @@ pyenv/
 
 # debug database
 debug.db
+
+
+#Frontend
+todo-react-frontend/.cache/
+todo-react-frontend/coverage/
+todo-react-frontend/dist/*
+todo-react-frontend/!dist/index.html
+todo-react-frontend/node_modules/
+todo-react-frontend/*.log
+
+# OS generated files
+.DS_Store
+todo-react-frontend/.DS_Store?
+todo-react-frontend/._*
+todo-react-frontend/.Spotlight-V100
+todo-react-frontend/.Trashes
+todo-react-frontend/ehthumbs.db
+todo-react-frontend/Thumbs.db

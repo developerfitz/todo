@@ -56,6 +56,8 @@ def entry(entry_id):
                 entry.completed = request_json["completed"]
             else:
                 raise InvalidUsage(str(request_json["completed"]) + " is not a boolean.")
+        if "assignee" in request_json:
+            entry.assignee = request_json["assignee"]
         if "order" in request_json:
             if type(request_json["order"]) is int:
                 entry.order = request_json["order"]

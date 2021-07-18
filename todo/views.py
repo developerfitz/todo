@@ -83,6 +83,36 @@ def entry(entry_id):
     else:
         return jsonify(dict())
 
+@app.route("/assignee/<string:assignee>", methods=["GET"])
+def entries_by_assignee(assignee):
+    entries = Entry.query.filter(Entry.assignee == assignee).all()
+    response = []
+    for entry in entries:
+        response.append({
+            "id": entry.id,
+            "title": entry.title,
+            "assignee": entry.assignee,
+            "order": entry.order,
+            "completed": entry.completed,
+        })
+
+    return jsonify(response)
+
+@app.route("/assignee/unassigned", methods=["GET"])
+def unassigned_entries():
+    entries = Entry.query.filter(Entry.assignee == None).all()
+    response = []
+    for entry in entries:
+        response.append({
+            "id": entry.id,
+            "title": entry.title,
+            "assignee": entry.assignee,
+            "order": entry.order,
+            "completed": entry.completed,
+        })
+
+    return jsonify(response)
+
 @app.errorhandler(InvalidUsage)
 def handle_invalid_usage(error):
     response = jsonify(error.to_dict())

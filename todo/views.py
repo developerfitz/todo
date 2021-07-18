@@ -31,13 +31,7 @@ def index():
         db_session.add(entry)
         db_session.commit()
 
-        return jsonify({
-            "id": entry.id,
-            "title": entry.title,
-            "assignee": entry.assignee,
-            "order": entry.order,
-            "completed": entry.completed,
-        })
+        return jsonify(construct_dict(entry))
 
     else:
         if request.method == "DELETE":
@@ -46,13 +40,7 @@ def index():
 
         response = []
         for entry in Entry.query.all():
-            response.append({
-                "id": entry.id,
-                "title": entry.title,
-                "assignee": entry.assignee,
-                "order": entry.order,
-                "completed": entry.completed,
-            })
+            response.append(construct_dict(entry))
 
         return json.dumps(response)
 
@@ -88,13 +76,7 @@ def entries_by_assignee(assignee):
     entries = Entry.query.filter(Entry.assignee == assignee).all()
     response = []
     for entry in entries:
-        response.append({
-            "id": entry.id,
-            "title": entry.title,
-            "assignee": entry.assignee,
-            "order": entry.order,
-            "completed": entry.completed,
-        })
+        response.append(construct_dict(entry))
 
     return jsonify(response)
 
@@ -103,13 +85,7 @@ def unassigned_entries():
     entries = Entry.query.filter(Entry.assignee == None).all()
     response = []
     for entry in entries:
-        response.append({
-            "id": entry.id,
-            "title": entry.title,
-            "assignee": entry.assignee,
-            "order": entry.order,
-            "completed": entry.completed,
-        })
+        response.append(construct_dict(entry))
 
     return jsonify(response)
 
@@ -120,13 +96,9 @@ def handle_invalid_usage(error):
     return response
 
 def construct_dict(entry):
-    if entry.order:
-        return dict(title=entry.title, completed=entry.completed,
-            url=url_for("entry", entry_id=entry.id, _external=True),
-            order=entry.order)
-    else:
-        return dict(title=entry.title, completed=entry.completed,
-            url=url_for("entry", entry_id=entry.id, _external=True))
+    return dict(title=entry.title, id=entry.id, completed=entry.completed,
+        assignee=entry.assignee, order=entry.order,
+        url=url_for("entry", entry_id=entry.id, _external=True))
 
 
 @app.teardown_appcontext

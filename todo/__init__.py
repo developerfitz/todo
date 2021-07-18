@@ -1,6 +1,6 @@
 import os
 from flask import Flask
-from flask.ext.cors import CORS
+from flask_cors import CORS
 
 DATABASE = os.getenv("DATABASE_URL", "sqlite:///debug.db")
 DATABASE = DATABASE.strip()

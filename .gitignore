@@ -58,6 +58,7 @@ target/
 
 # Virtualenv
 virtualenv/
+pyenv/
 
 # debug database
 debug.db

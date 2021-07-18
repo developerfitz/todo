@@ -11,23 +11,49 @@ from todo.error_handlers import InvalidUsage
 def index():
     if request.method == "POST":
         request_json = request.get_json()
-        if "order" in request_json:
+        if "order" in request_json and "assignee" in request_json:
             if type(request_json["order"]) is int:
-                entry = Entry(request_json["title"], request_json["order"])
+                entry = Entry(title=request_json["title"], assignee=request_json["assignee"], order=request_json["order"])
+            else:
+                raise InvalidUsage(str(request_json["order"]) + " is not an integer.")
+
+        elif "assignee" in request_json:
+            entry = Entry(title=request_json["title"], assignee=request_json["assignee"])
+
+        elif "order" in request_json:
+            if type(request_json["order"]) is int:
+                entry = Entry(title=request_json["title"], order=request_json["order"])
             else:
                 raise InvalidUsage(str(request_json["order"]) + " is not an integer.")
         else:
             entry = Entry(request_json["title"])
+
         db_session.add(entry)
         db_session.commit()
-        return jsonify(construct_dict(entry))
+
+        return jsonify({
+            "id": entry.id,
+            "title": entry.title,
+            "assignee": entry.assignee,
+            "order": entry.order,
+            "completed": entry.completed,
+        })
+
     else:
         if request.method == "DELETE":
             Entry.query.delete()
             db_session.commit()
+
         response = []
         for entry in Entry.query.all():
-            response.append(construct_dict(entry))
+            response.append({
+                "id": entry.id,
+                "title": entry.title,
+                "assignee": entry.assignee,
+                "order": entry.order,
+                "completed": entry.completed,
+            })
+
         return json.dumps(response)
 
 @app.route("/<int:entry_id>", methods=["GET", "PATCH", "DELETE"])
